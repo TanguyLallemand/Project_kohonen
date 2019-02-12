@@ -34,4 +34,7 @@ Summary:
     - n,o,p -> c-cap-alpha
 
 
-For protein block a we have a training dataset
+For protein block a we have a training dataset.
+
+Algorithm:
+random vector file (-180,180), Generate initial map. Using training dataset, Calculate RMSD and put it in right cell
