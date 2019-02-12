@@ -14,5 +14,24 @@ For example, in a protein of 10 aa:
 - Third pb is psi3, phi3, psi4, phi5, psi5, phi6, psi6, phi7,psi7
 
 
+
+
+PB-torsion file generation
+
 Algorithm:
-- 
+- Each cells have a value. For each value that we want to classify,
+
+
+Summary:
+- Obtaining datas from PISCES
+- DSSP to obtain psi and phi angles
+- Generate PB dataset composed by 16 protein blocks
+    - a, b, -> c alpha-N-cap
+    - d -> beta
+    - e, f -> c-cap-beta
+    - g, h -> coil
+    - m -> alpha
+    - n,o,p -> c-cap-alpha
+
+
+For protein block a we have a training dataset
