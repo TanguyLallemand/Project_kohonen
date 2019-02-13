@@ -17,10 +17,14 @@ for i in `ls *.ang`; do
     # A loop to construct protein blocks
     for((num=1;num<=$number_of_commas;num++));do
         # Get phi angle
-        head -n1 $name.ang | cut -d ',' -f $num-$((num+4)) | paste -s -d ',' >> ./protein_blocks/$name.$num.ang
+        phi=$(head -n1 $name.ang | cut -d ',' -f $num-$((num+4)) | paste -s -d ',')
         # Get psi angle
-        tail -n1 $name.ang | cut -d ',' -f $num-$((num+4)) | paste -s -d ',' >> ./protein_blocks/$name.$num.ang
+        psi=$(tail -n1 $name.ang | cut -d ',' -f $num-$((num+4)) | paste -s -d ',')
+        # Save informations
+        echo $phi >> "./protein_blocks/$name.ang"
+        echo $psi >> "./protein_blocks/$name.ang"
         # Get sequence of protein block
-        cat $name.seq | cut -c$num-$((num+4)) > ./protein_blocks/$name.$num.seq
+        # $seq=$(cat $name.seq | cut -c$num-$((num+4)))
+        # echo $seq >> "./protein_blocks/$name.seq"
     done
 done
