@@ -19,8 +19,16 @@ For example, in a protein of 10 aa:
 PB-torsion file generation
 
 Algorithm:
+An unsupervised algorithm classification. Using data it train to classify PB
+PBA: phi psi phi psi omega phi omega phi omega phi
 - Each cells have a value. For each value that we want to classify,
+In our dataset there is no overlap because it s a dataset with only PBA, coming from different places.
 
+1- Create a random matrix with 16 random values. Let s calling it v
+2- Pick one random value from training dataset and compare it to each value of cell (=neuron). It compare by calculating RMSD. With put value in closest cell. This neuron will be the most educated, and neuron next to him will learn a bit less, decreasing with radius.
+Choosed neuron will be k
+w_next= w^k*(t+1)= w^k*(t) + [v-w^(k(t))]* eta e^(-v/2r²*(r^k-r^next)²)
+3- Loop until results are constant
 
 Summary:
 - Obtaining datas from PISCES
