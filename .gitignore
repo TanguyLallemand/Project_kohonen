@@ -6,3 +6,5 @@
 *.seq
 *.dspp
 *.csv
+*.Rhistory
+*.RData
