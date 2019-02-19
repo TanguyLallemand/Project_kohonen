@@ -5,9 +5,9 @@ generate_a_random_dataset_function<-function()
     for (iterator in 1:number_of_neurons)
     {
         # Generate a vector of eight values
-        vector_rand <- round(runif(8, min=-180, max=180), digits=0)
+        vector_random <- round(runif(8, min=-180, max=180), digits=0)
         # Save it in a list
-        list_of_random_vector[iterator]<-list(vector_rand)
+        list_of_random_vector[iterator]<-list(vector_random)
     }
     return(list_of_random_vector)
 }
@@ -26,7 +26,7 @@ rmsd_function<-function(training_dataset_for_block_a, kohonen_matrix)
     return(rms)
 }
 
-learning_function<-function(init_rate,iterations,prot_phipsi)
+learning_function<-function(init_rate,current_iteration,phipsi_angles)
 {
-    return(init_rate/(1+(iterations/nrow(prot_phipsi))))
+    return(init_rate/(1+(current_iteration/nrow(phipsi_angles))))
 }
