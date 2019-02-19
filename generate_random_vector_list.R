@@ -1,8 +1,10 @@
+###############################################################################
+# Load libraries, import data and init some variables
+###############################################################################
 library("ggplot2")
 library("gridExtra")
 source("functions.R")
 setwd(getwd())
-
 # Import datas
 training_dataset_for_block_a <- read.csv("./dataset/training_dataset_for_block_a.phipsi", header=FALSE)
 # Init some variables
@@ -10,26 +12,32 @@ number_of_neurons<-16
 init_rate=0.75
 init_radi=2
 number_max_iteration=2
-list_of_random_vector<-list()
+list_of_random_vector <- list()
+list_of_plot <- list()
+count_iterations <- 0
+# Construct random dataset to init kohonen matrix
 # Generate a list of random dataset
 list_of_random_vector<-generate_a_random_dataset_function()
 # Initalize kohonen matrix with random values
 kohonen_matrix<-matrix(list_of_random_vector,ncol=sqrt(number_of_neurons),nrow=sqrt(number_of_neurons))
-dimnames(kohonen_matrix) <- list(rownames(kohonen_matrix, do.NULL = FALSE),
-                            colnames(kohonen_matrix, do.NULL = FALSE))
+# dimnames(kohonen_matrix) <- list(rownames(kohonen_matrix, do.NULL = FALSE),
+#                             colnames(kohonen_matrix, do.NULL = FALSE))
+# 
+# row <- c("row1","row2","row3","row4")
+# col <- c("col1","col2","col3","col4")
+# apply(expand.grid(row, col), 1, paste, collapse="")
 
-row <- c("row1","row2","row3","row4")
-col <- c("col1","col2","col3","col4")
-apply(expand.grid(row, col), 1, paste, collapse="")
-
-
+###############################################################################
+# Compute Kohonen algorithm
+###############################################################################
 for(current_iteration in 1:number_max_iteration)
 {
-    for(i_row in 1:10) #for(i_row in 1:nrow(training_dataset_for_block_a_sampled))
+    # training_dataset_for_block_a_sampled<-training_dataset_for_block_a[sample(nrow(training_dataset_for_block_a)),]
+    for(i_row in 1:nrow(training_dataset_for_block_a))
     {
         #Update learn_rate and radius at each row of each iteration
-        learn_rate<-learning_function(init_rate,((current_iteration-1)*nrow(training_dataset_for_block_a_sampled))+i_row,training_dataset_for_block_a_sampled)
-        learn_radi<-learning_function(init_radi,((current_iteration-1)*nrow(training_dataset_for_block_a_sampled))+i_row,training_dataset_for_block_a_sampled)
+        learn_rate<-learning_function(init_rate,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
+        learn_radi<-learning_function(init_radi,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
         #Find distance between each vectors of angles of Kohonen Map and the training vector
         rmsd_result<-lapply(list_of_random_vector, rmsd_function, training_dataset_for_block_a=training_dataset_for_block_a[1,])
         #Unlist and create a matrix of distances
@@ -48,14 +56,18 @@ for(current_iteration in 1:number_max_iteration)
     
 }
 
-list_of_plot = list()
-count_iterations<-0
 
-
-for(i in 1:sqrt(number_of_neurons)){ # For each col
-    for(j in 1:sqrt(number_of_neurons)){ # Each line
+# we go through all columns
+for(i in 1:sqrt(number_of_neurons))
+{
+    # we go through all rows
+    for(j in 1:sqrt(number_of_neurons))
+    {
+        # Save current iteration
         count_iterations <- count_iterations+1
+        # Get one cell of kohonen matrix
         cell_of_kohonen_matrix<-unlist(kohonen_matrix[i,j])
+        # Construct a graph of this cell
         ggplot <- ggplot() + 
             aes(x=seq_along(cell_of_kohonen_matrix), y=cell_of_kohonen_matrix) +
             geom_line(colour="#0072B2")  + geom_hline(yintercept=0, linetype="dashed", color = "red") + 
@@ -66,7 +78,12 @@ for(i in 1:sqrt(number_of_neurons)){ # For each col
                   axis.title.y=element_blank(),
                   axis.text.y=element_blank(),
                   axis.ticks.y=element_blank())
+        # Save this graph in a list of plot
         list_of_plot[[count_iterations]] <- ggplotGrob(ggplot)
-        }
+    }
 }
+# Construct a figure gathering all plots
 multiple_graph <- grid.arrange(grobs=list_of_plot, ncol=4, nrow=4)
+# Save it in pdf
+ggsave(filename="multiple_graph.png", plot=multiple_graph)
+
