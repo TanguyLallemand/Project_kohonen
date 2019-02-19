@@ -2,7 +2,7 @@
 generate_a_random_dataset_function<-function()
 {
     list_of_random_vector<-list()
-    for (iterator in 1:number_of_neurons) 
+    for (iterator in 1:number_of_neurons)
     {
         # Generate a vector of eight values
         vector_rand <- round(runif(8, min=-180, max=180), digits=0)
@@ -30,4 +30,3 @@ learning_function<-function(init_rate,iterations,prot_phipsi)
 {
     return(init_rate/(1+(iterations/nrow(prot_phipsi))))
 }
-
