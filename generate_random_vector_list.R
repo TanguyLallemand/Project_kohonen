@@ -43,7 +43,8 @@ for (x in 1:sqrt(number_of_neurons))
 ###############################################################################
 for(current_iteration in 1:number_max_iteration)
 {
-    for(i_row in 1:nrow(training_dataset_for_block_a))
+    #for(i_row in 1:nrow(training_dataset_for_block_a))
+    for(i_row in 1:100)
     {
         #Update learn_rate and radius at each row of each iteration
         learn_rate<-learning_function(init_rate,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
@@ -59,7 +60,6 @@ for(current_iteration in 1:number_max_iteration)
         for (mylist in 1:number_of_neurons)
         {
             distance<-as.numeric(dist(rbind(win_index[1,], neuron_label[[mylist]])))
-            print(distance)
             list_of_random_vector[[mylist]]<-(list_of_random_vector[[mylist]]+ ( training_dataset_for_block_a[i_row,]-list_of_random_vector[[mylist]])* (learn_rate*( exp (- ((distance)^2/(2*((learn_radi)^2)) )) ) ))
         }
         kohonen_matrix<-matrix(list_of_random_vector,sqrt(number_of_neurons),sqrt(number_of_neurons))
