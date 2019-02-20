@@ -22,7 +22,6 @@ rmsd_function<-function(training_dataset_for_block_a, kohonen_matrix)
         difference <- as.numeric(kohonen_matrix[i])-as.numeric(training_dataset_for_block_a[i])
         rms <- sqrt(mean(unlist(difference)^2))
     }
-    print(rms)
     return(rms)
 }
 

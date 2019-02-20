@@ -3,8 +3,12 @@
 ###############################################################################
 library("ggplot2")
 library("gridExtra")
-source("functions.R")
 setwd(getwd())
+print(getwd( ))
+# Get functions
+if(!exists("generate_a_random_dataset_function", mode="function")) source("./functions.R")
+if(!exists("rmsd_function", mode="function")) source("./functions.R")
+if(!exists("learning_function", mode="function")) source("./functions.R")
 # Import datas
 training_dataset_for_block_a <- read.csv("./dataset/training_dataset_for_block_a.phipsi", header=FALSE)
 # Init some variables
@@ -20,8 +24,8 @@ count_iterations <- 0
 list_of_random_vector<-generate_a_random_dataset_function()
 # Initalize kohonen matrix with random values
 kohonen_matrix<-matrix(list_of_random_vector,ncol=sqrt(number_of_neurons),nrow=sqrt(number_of_neurons))
-rownames(kohonen_matrix)<-c('1','2','3','4','5')
-colnames(kohonen_matrix)<-c('1','2','3','4','5')
+rownames(kohonen_matrix)<-c('1','2','3','4')
+colnames(kohonen_matrix)<-c('1','2','3','4')
 # apply(expand.grid(row, col), 1, paste, collapse="")
 
 ###############################################################################
@@ -43,12 +47,12 @@ for(current_iteration in 1:number_max_iteration)
         rmsd_matrix<-matrix(rmsd_vector,sqrt(number_of_neurons),sqrt(number_of_neurons))
         #Take the index of the winning neuron, it's the neuron that are more similar than the training vector
         win_index<-which(rmsd_matrix==min(rmsd_matrix), arr.ind=TRUE) 
-        current_index<-list(c(1,1),c(2,1),c(3,1), c(4,1), c(5,1), c(1,2),c(2,2),c(3,2), c(4,2),c(5,2),c(1,3),c(2,3),c(3,3), c(4,3),c(5,3), c(1,4),c(2,4),c(3,4), c(4,4), c(5,4), c(1,4),c(2,4),c(3,4), c(4,4), c(5,5))
+        current_index<-list(c(1,1),c(2,1),c(3,1), c(4,1), c(1,2),c(2,2),c(3,2), c(4,2),c(1,3),c(2,3),c(3,3), c(4,3), c(1,4),c(2,4),c(3,4), c(4,4), c(1,4),c(2,4),c(3,4), c(4,4))
         #Update of angles of Kohonen Map vectors with the equation (be careful at number of parenthesis)
         for (mylist in 1:number_of_neurons)
         {
             distance<-as.numeric(dist(rbind(win_index[1,], current_index[[mylist]])))
-            list_of_random_vector[[mylist]]<-(list_of_random_vector[[mylist]]+ ( training_dataset_for_block_a_sampled[i_row,]-list_of_random_vector[[mylist]])* (learn_rate*( exp (- ((distance)^2/(2*((learn_radi)^2)) )) ) ))
+            list_of_random_vector[[mylist]]<-(list_of_random_vector[[mylist]]+ ( training_dataset_for_block_a[i_row,]-list_of_random_vector[[mylist]])* (learn_rate*( exp (- ((distance)^2/(2*((learn_radi)^2)) )) ) ))
         }
         kohonen_matrix<-matrix(list_of_random_vector,sqrt(number_of_neurons),sqrt(number_of_neurons))
     }
