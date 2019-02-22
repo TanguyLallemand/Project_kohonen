@@ -1,3 +1,13 @@
+verbose<-function(init_rate, initial_radius, number_max_iteration)
+{
+    print("############Configuration used:############")
+    print(paste("Initial learning rate : ",init_rate, sep=""))
+    print(paste("Initial radius: ",initial_radius, sep=""))
+    print(paste("Number of iterations: ", number_max_iteration, sep=""))
+    print("###########################################")
+}
+
+
 # A loop to generate a random dataset
 generate_a_random_dataset_function<-function()
 {

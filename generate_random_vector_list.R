@@ -14,17 +14,20 @@ library("optparse")
 # Setup argument parser
 ###############################################################################
 option_list <- list(
+    make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
+                help="Activate verbosity of this script"),
     make_option(c("-r", "--rate"), action="store_true", type="numeric", default=0.75,
-                help="give initial learn rate"),
+                help="Give a different initial learn rate"),
     make_option(c("-t", "--radius"), action="store_true", type="numeric", default=2.0,
-                help="give initial learn radius"),
+                help="Give a different initial learn radius"),
     make_option(c("-n", "--number_iteration"), action="store_true", type="integer", default=2, 
-                help="give number of iterations")
+                help="Give a particular number of iterations")
 ); 
 
+#TODOOOOO add an arg to be verbose or not
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
-print(opt$rate)
+
 
 ###############################################################################
 # Load functions, init some variables
@@ -36,6 +39,7 @@ library("gridExtra")
 # Set current path
 setwd(getwd())
 # Get functions from library file
+if(!exists("verbose", mode="function")) source("./functions.R")
 if(!exists("generate_a_random_dataset_function", mode="function")) source("./functions.R")
 if(!exists("rmsd_function", mode="function")) source("./functions.R")
 if(!exists("learning_function", mode="function")) source("./functions.R")
@@ -47,8 +51,12 @@ number_of_neurons<-16
 init_rate=opt$rate
 initial_radius=opt$radius
 number_max_iteration=opt$number_iteration
+if(opt$verbose)
+{
+    verbose(init_rate, initial_radius, number_max_iteration)
+}
 # Construct name of output file using those variables
-paste(s1, s2, sep = "")
+#paste(s1, s2, sep = "")
 ###############################################################################
 # Import datas, generate a random datatset
 ###############################################################################
