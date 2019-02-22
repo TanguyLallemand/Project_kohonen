@@ -1,23 +1,23 @@
 ###############################################################################
 # Load libraries, init some variables
 ###############################################################################
+# Library to build more beautiful graphs, if not installed please run install.packages("ggplot2")
 library("ggplot2")
+# Library to construct a multiple graph object, if not installed please run run install.packages("gridExtra")
 library("gridExtra")
 setwd(getwd())
-# Get functions
+# Get functions from library file
 if(!exists("generate_a_random_dataset_function", mode="function")) source("./functions.R")
 if(!exists("rmsd_function", mode="function")) source("./functions.R")
 if(!exists("learning_function", mode="function")) source("./functions.R")
 if(!exists("generate_all_possible_combinations", mode="function")) source("./functions.R")
+if(!exists("construct_and_save_plots", mode="function")) source("./functions.R")
+
 # Configuration of parameters for algorithm
 number_of_neurons<-16
 init_rate=0.75
-init_radi=0.5
-number_max_iteration=2
-# Inititialization of variables
-list_of_random_vector <- list()
-list_of_plot <- list()
-neuron_label<-list()
+initial_radius=2
+number_max_iteration=3
 
 
 ###############################################################################
@@ -41,25 +41,28 @@ neuron_label<- generate_all_possible_combinations(number_of_neurons)
 ###############################################################################
 for(current_iteration in 1:number_max_iteration)
 {
-    #for(i_row in 1:nrow(training_dataset_for_block_a))
-    for(i_row in 1:100)
+    for(i_row in 1:nrow(training_dataset_for_block_a))
+    #for(i_row in 1:100)
     {
-        # Update learn_rate
+        print(i_row)
+        # Update learn_rate, based on the degree of progress of the algorithm, this allows to strengthen the solutions and thus allow a better convergence
         learn_rate<-learning_function(init_rate,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
         # Update learn_radius
-        learn_radius<-learning_function(init_radi,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
+        learn_radius<-learning_function(initial_radius,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
         #Find distance between each vectors of angles of Kohonen Map and the training vector
-        best_neuron_for_iter <- rmsd_function(kohonen_matrix,training_dataset_for_block_a)
-        print(paste0("best neuron",best_neuron_for_iter))
-        #Update of angles of Kohonen Map vectors with the equation (be careful at number of parenthesis)
+        closest_cell <- rmsd_function(kohonen_matrix,training_dataset_for_block_a)
+        # For every neurons, reconstruct a new matrix based on learning function
         for (mylist in 1:number_of_neurons)
         {
-            distance<-as.numeric(dist(rbind(best_neuron_for_iter, neuron_label[[mylist]])))
+            # Get distance of best neuron from current neuron
+            distance<-as.numeric(dist(rbind(closest_cell, neuron_label[[mylist]])))
+            # Reconstruct a new matrix
             list_of_random_vector[[mylist]]<-(list_of_random_vector[[mylist]]+ ( training_dataset_for_block_a[i_row,]-list_of_random_vector[[mylist]])* (learn_rate*( exp (- ((distance)^2/(2*((learn_radius)^2)) )) ) ))
         }
+        # Update kohonen map with new matrix juste generated
         kohonen_matrix<-matrix(list_of_random_vector,sqrt(number_of_neurons),sqrt(number_of_neurons))
     }
 }
-
+# save results
 construct_and_save_plots(number_of_neurons, kohonen_matrix)
 

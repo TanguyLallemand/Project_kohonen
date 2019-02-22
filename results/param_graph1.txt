@@ -1,0 +1,4 @@
+number_of_neurons<-16
+init_rate=0.75
+init_radi=0.5
+number_max_iteration=2

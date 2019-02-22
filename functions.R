@@ -66,11 +66,12 @@ learning_function<-function(init_rate,current_iteration,phipsi_angles)
 
 construct_and_save_plots <- function(number_of_neurons, kohonen_matrix)
 {
+    list_of_plot <- list()
     count_iterations <- 0
-    # we go through all columns
+    # We go through all columns
     for(i in 1:sqrt(number_of_neurons))
     {
-        # we go through all rows
+        # We go through all rows
         for(j in 1:sqrt(number_of_neurons))
         {
             # Save current iteration
