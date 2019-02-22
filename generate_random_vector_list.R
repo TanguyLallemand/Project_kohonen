@@ -24,7 +24,6 @@ option_list <- list(
                 help="Give a particular number of iterations")
 ); 
 
-#TODOOOOO add an arg to be verbose or not
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
 
@@ -48,12 +47,12 @@ if(!exists("construct_and_save_plots", mode="function")) source("./functions.R")
 
 # Configuration of parameters for algorithm, using passed informations by argument
 number_of_neurons<-16
-init_rate=opt$rate
+learn_rate_at_initialization=opt$rate
 initial_radius=opt$radius
 number_max_iteration=opt$number_iteration
 if(opt$verbose)
 {
-    verbose(init_rate, initial_radius, number_max_iteration)
+    verbose(learn_rate_at_initialization, initial_radius, number_max_iteration)
 }
 # Construct name of output file using those variables
 #paste(s1, s2, sep = "")
@@ -78,12 +77,16 @@ neuron_label<- generate_all_possible_combinations(number_of_neurons)
 ###############################################################################
 for(current_iteration in 1:number_max_iteration)
 {
+    print(paste("Iteration number: ",current_iteration,sep=""))
     for(i_row in 1:nrow(training_dataset_for_block_a))
     #for(i_row in 1:100)
     {
-        print(i_row)
+        if(opt$verbose)
+        {
+            print(paste("row of training datatset: ", i_row,sep =""))
+        }
         # Update learn_rate, based on the degree of progress of the algorithm, this allows to strengthen the solutions and thus allow a better convergence
-        learn_rate<-learning_function(init_rate,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
+        learn_rate<-learning_function(learn_rate_at_initialization,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
         # Update learn_radius
         learn_radius<-learning_function(initial_radius,((current_iteration-1)*nrow(training_dataset_for_block_a))+i_row,training_dataset_for_block_a)
         # Find distance between each vectors of angles from Kohonen Map and current vector from the training dataset
