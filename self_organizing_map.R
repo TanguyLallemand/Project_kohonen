@@ -11,33 +11,12 @@ library("gridExtra")
 library("optparse")
 
 ###############################################################################
-# Setup argument parser
-###############################################################################
-option_list <- list(
-    make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
-                help="Activate verbosity of this script"),
-    make_option(c("-r", "--rate"), action="store_true", type="numeric", default=0.75,
-                help="Give a different initial learn rate"),
-    make_option(c("-t", "--radius"), action="store_true", type="numeric", default=2.0,
-                help="Give a different initial learn radius"),
-    make_option(c("-n", "--number_iteration"), action="store_true", type="integer", default=2, 
-                help="Give a particular number of iterations")
-); 
-
-opt_parser = OptionParser(option_list=option_list);
-opt = parse_args(opt_parser);
-
-
-###############################################################################
 # Load functions, init some variables
 ###############################################################################
-# Library to build more beautiful graphs, if not installed please run install.packages("ggplot2")
-library("ggplot2")
-# Library to construct a multiple graph object, if not installed please run run install.packages("gridExtra")
-library("gridExtra")
 # Set current path
 setwd(getwd())
 # Get functions from library file
+if(!exists("arg_parser", mode="function")) source("./functions.R")
 if(!exists("verbose", mode="function")) source("./functions.R")
 if(!exists("generate_a_random_dataset_function", mode="function")) source("./functions.R")
 if(!exists("rmsd_function", mode="function")) source("./functions.R")
@@ -45,6 +24,10 @@ if(!exists("learning_function", mode="function")) source("./functions.R")
 if(!exists("generate_all_possible_combinations", mode="function")) source("./functions.R")
 if(!exists("construct_and_save_plots", mode="function")) source("./functions.R")
 
+###############################################################################
+# Setup argument parser
+###############################################################################
+opt <- arg_parser()
 # Configuration of parameters for algorithm, using passed informations by argument
 number_of_neurons<-16
 learn_rate_at_initialization=opt$rate
@@ -54,8 +37,8 @@ if(opt$verbose)
 {
     verbose(learn_rate_at_initialization, initial_radius, number_max_iteration)
 }
-# Construct name of output file using those variables
-#paste(s1, s2, sep = "")
+
+
 ###############################################################################
 # Import datas, generate a random datatset
 ###############################################################################
@@ -103,6 +86,12 @@ for(current_iteration in 1:number_max_iteration)
         kohonen_matrix<-matrix(list_of_random_vector,sqrt(number_of_neurons),sqrt(number_of_neurons))
     }
 }
+# Construct name of output file using current parameters
+filename<-(paste("mutliple_graph_learn_rate",learn_rate_at_initialization,sep="_"))
+filename<-(paste(filename,initial_radius,sep="_"))
+filename<-(paste(filename,number_max_iteration,sep="_"))
+filename<-(paste("./results/",filename,sep=""))
+
 # save results
-construct_and_save_plots(number_of_neurons, kohonen_matrix)
+construct_and_save_plots(number_of_neurons, kohonen_matrix, filename)
 

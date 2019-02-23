@@ -1,4 +1,25 @@
 ###############################################################################
+# Setup argument parser
+###############################################################################
+arg_parser<-function()
+{
+    option_list <- list(
+        make_option(c("-v", "--verbose"), action="store_true", default=TRUE,
+                    help="Activate verbosity of this script"),
+        make_option(c("-r", "--rate"), action="store_true", type="numeric", default=0.75,
+                    help="Give a different initial learn rate"),
+        make_option(c("-t", "--radius"), action="store_true", type="numeric", default=2.0,
+                    help="Give a different initial learn radius"),
+        make_option(c("-n", "--number_iteration"), action="store_true", type="integer", default=2, 
+                    help="Give a particular number of iterations")
+     ); 
+  opt_parser = OptionParser(option_list=option_list);
+  opt = parse_args(opt_parser);
+  return(opt)
+}
+
+
+###############################################################################
 # If argument for verbosity has been passed this function will display current 
 # configuration
 ###############################################################################
@@ -87,7 +108,7 @@ learning_function<-function(init_rate,current_iteration,phipsi_angles)
     return(init_rate/(1+(current_iteration/nrow(phipsi_angles))))
 }
 
-construct_and_save_plots <- function(number_of_neurons, kohonen_matrix)
+construct_and_save_plots <- function(number_of_neurons, kohonen_matrix, filename)
 {
     list_of_plot <- list()
     count_iterations <- 0
@@ -119,5 +140,5 @@ construct_and_save_plots <- function(number_of_neurons, kohonen_matrix)
     # Construct a figure gathering all plots
     multiple_graph <- grid.arrange(grobs=list_of_plot, ncol=4, nrow=4,  top = "Kohonen map with 16 neurons")
     # Save it in pdf
-    ggsave(filename="./results/multiple_graph.png", plot=multiple_graph)
+    ggsave(filename=paste(filename,".png", sep = ""), plot=multiple_graph)
 }
