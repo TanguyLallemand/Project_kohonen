@@ -1,5 +1,5 @@
 #!/home/storm/anaconda3/envs/rstudio/bin/Rscript
-
+# Author: Tanguy Lallemand
 ###############################################################################
 # Load libraries
 ###############################################################################
@@ -25,7 +25,7 @@ if(!exists("generate_all_possible_combinations", mode="function")) source("./fun
 if(!exists("construct_and_save_plots", mode="function")) source("./functions.R")
 
 ###############################################################################
-# Setup argument parser
+# Setup argument parser, set configuration
 ###############################################################################
 opt <- arg_parser()
 # Configuration of parameters for algorithm, using passed informations by argument

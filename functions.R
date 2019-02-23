@@ -1,3 +1,5 @@
+# Author: Tanguy Lallemand
+
 ###############################################################################
 # Setup argument parser
 ###############################################################################
@@ -32,6 +34,7 @@ verbose<-function(learn_rate_at_initialization, initial_radius, number_max_itera
     print("###########################################")
 }
 
+
 ###############################################################################
 # Generate a random dataset composed by vector of 8 random values, 
 # saved in a list
@@ -48,6 +51,7 @@ generate_a_random_dataset_function<-function()
     }
     return(list_of_random_vector)
 }
+
 
 ###############################################################################
 # Generate all possible compilation using number of neurons, allows to 
@@ -68,6 +72,8 @@ generate_all_possible_combinations<-function(number_of_neurons)
     }
     return(neuron_label)
 }
+
+
 ###############################################################################
 # Calculate rmsd distance between a vector of training dataset and all neurons 
 # of kohonen map, it will return index of the closest neuron to current row
@@ -103,11 +109,19 @@ rmsd_function<-function(training_dataset_for_block_a, kohonen_matrix)
 }
 
 
+###############################################################################
+# Learning fuction for kohonen algorithm
+###############################################################################
 learning_function<-function(init_rate,current_iteration,phipsi_angles)
 {
     return(init_rate/(1+(current_iteration/nrow(phipsi_angles))))
 }
 
+
+###############################################################################
+# Construct a plot using kohonen map
+# Save it in png using contructed filename
+###############################################################################
 construct_and_save_plots <- function(number_of_neurons, kohonen_matrix, filename)
 {
     list_of_plot <- list()
