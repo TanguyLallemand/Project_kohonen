@@ -11,7 +11,6 @@ for i in `ls *.ang`; do
     # Alternatively, it is possible to do following lines to get number of aas to determine how many protein blocks we can do
     # number_of_aa=`cat $name.seq | wc -c`
     # number_of_aa=$((number_of_aa-3))
-
     # Change five by four because the two last Amino acids are missing with five. For example, for protein 1A3C, with j-5 last Amino acids are I, Y and E, N are missing. If we correct with 3 last amino acids are E and N.
     number_of_commas=$((number_of_commas-4))
     # A loop to construct protein blocks
@@ -23,8 +22,5 @@ for i in `ls *.ang`; do
         # Save informations
         echo $phi >> "./protein_blocks/$name.ang"
         echo $psi >> "./protein_blocks/$name.ang"
-        # Get sequence of protein block
-        # $seq=$(cat $name.seq | cut -c$num-$((num+4)))
-        # echo $seq >> "./protein_blocks/$name.seq"
     done
 done
