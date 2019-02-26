@@ -152,7 +152,7 @@ construct_and_save_plots <- function(number_of_neurons, kohonen_matrix, filename
         }
     }
     # Construct a figure gathering all plots
-    multiple_graph <- grid.arrange(grobs=list_of_plot, ncol=4, nrow=4,  top = "Kohonen map with 16 neurons")
+    multiple_graph <- grid.arrange(grobs=list_of_plot, ncol=sqrt(number_of_neurons), nrow=sqrt(number_of_neurons))
     # Save it in pdf
     ggsave(filename=paste(filename,".png", sep = ""), plot=multiple_graph)
 }

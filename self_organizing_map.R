@@ -33,6 +33,7 @@ number_of_neurons<-16
 learn_rate_at_initialization=opt$rate
 initial_radius=opt$radius
 number_max_iteration=opt$number_iteration
+# If more verbose is asked, print current configuration
 if(opt$verbose)
 {
     verbose(learn_rate_at_initialization, initial_radius, number_max_iteration)
@@ -60,10 +61,9 @@ neuron_label<- generate_all_possible_combinations(number_of_neurons)
 ###############################################################################
 for(current_iteration in 1:number_max_iteration)
 {
-    print(paste("Iteration number: ",current_iteration,sep=""))
     for(i_row in 1:nrow(training_dataset_for_block_a))
-    #for(i_row in 1:100)
     {
+        # Print current line computed
         if(opt$verbose)
         {
             print(paste("row of training datatset: ", i_row,sep =""))
